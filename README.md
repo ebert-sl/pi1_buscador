@@ -8,4 +8,5 @@ Análise e Desenvolvimento de Sistemas 2023.2
 Professor: Ely Miranda da Silva
 
 ---
-Implementação de um buscador em Python.
+Implementação de um buscador em Python com as bibliotecas requests, requests-cache
+e Beautiful Soup.
