@@ -28,6 +28,7 @@ def main():
   print("\n-----------------------")
   autoridade(soup)
   frequencia_termos(soup, termo)
+  uso_em_tags(soup, termo)
   print("-----------------------\n")
   menu_continuar()
 
