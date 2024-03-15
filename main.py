@@ -2,6 +2,7 @@ import requests
 import requests_cache
 import re # Expressão regular
 import sys
+from datetime import datetime
 from bs4 import BeautifulSoup
 from funcoes_pontuacao import *
 
@@ -26,9 +27,8 @@ def main():
     menu_continuar()
 
   print("\n-----------------------")
-  autoridade(soup)
-  frequencia_termos(soup, termo)
-  uso_em_tags(soup, termo)
+  total = autoridade(soup) + frequencia_termos(soup, termo) + uso_em_tags(soup, termo) + auto_referencia(soup, url) + frescor(soup)
+  print(f"Total: {total} pontos")
   print("-----------------------\n")
   menu_continuar()
 
