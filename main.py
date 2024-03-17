@@ -1,17 +1,23 @@
-import re  # Expressão regular
+import re
 import sys
-from datetime import datetime
+from urllib.parse import urljoin
 
 import requests
 import requests_cache
 from bs4 import BeautifulSoup
-
-from funcoes_pontuacao import *
+from funcoes_pontuacao import (
+    auto_referencia,
+    autoridade,
+    frequencia_termos,
+    frescor,
+    uso_em_tags,
+)
 
 
 def main():
     url = input("Digite a URL desejada: ")
     termo = input("Digite o termo que deseja buscar: ")
+    links_visitados = set()
 
     if re.match(r"^\s*$", termo):
         # ^ início da string | \s* zero ou mais espaços em branco | $ final da string
@@ -22,24 +28,36 @@ def main():
         requests_cache.install_cache("./cache/banco")
         response = requests.get(url, verify=True)
         soup = BeautifulSoup(response.text, "html.parser")
-    except Exception as e:
-        print(
-            f"----------------------------------------\n"
-            f"URL inválida ou digitada incorretamente!\n"
-            f"----------------------------------------\n"
-        )
-        menu_continuar()
+        for link in soup.find_all("a"):
+            href = link.get("href")
+            if href:
+                href = urljoin(url, href)
 
-    print("\n-----------------------")
-    total = (
-        autoridade(soup)
-        + frequencia_termos(soup, termo)
-        + uso_em_tags(soup, termo)
-        + auto_referencia(soup, url)
-        + frescor(soup)
-    )
-    print(f"Total: {total} pontos")
-    print("-----------------------\n")
+                if href not in links_visitados:
+                    links_visitados.add(href)
+                    link_response = requests.get(href, verify=True)
+                    link_soup = BeautifulSoup(link_response.text, "html.parser")
+                    
+                    print()
+                    print("-----------------------")
+                    print(f"\nPontuando a página: {href}")
+                    print("\n-----------------------")
+                    total = (
+                        autoridade(link_soup)
+                        + frequencia_termos(link_soup, termo)
+                        + uso_em_tags(link_soup, termo)
+                        + auto_referencia(link_soup, url)
+                        + frescor(link_soup)
+                    )
+                    print(f"Total: {total} pontos")
+                    print("-----------------------\n")
+    except Exception:
+        print(
+            "----------------------------------------\n"
+            "URL inválida ou digitada incorretamente!\n"
+            "----------------------------------------\n"
+        )
+
     menu_continuar()
 
 
