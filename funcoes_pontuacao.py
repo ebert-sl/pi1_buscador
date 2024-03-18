@@ -133,7 +133,7 @@ def frescor(soup):
 
     ano_atual = datetime.now().year
     p_tags = soup.find_all("p")
-    pontuacao_frescor = 30
+    pontuacao_frescor = 0
 
     for p in p_tags:
         match = re.search(r"\b(\d{2}/\d{2}/\d{4})\b", p.text)
@@ -144,9 +144,10 @@ def frescor(soup):
             dia, mes, ano = data.split("/")
             ano = int(ano)
             if ano == ano_atual:
+                pontuacao_frescor = 30
                 print(f"Frescor: {pontuacao_frescor} pontos")
             else:
-                pontuacao_frescor = pontuacao_frescor - (5 * (ano_atual - ano))
+                pontuacao_frescor = 30 - (5 * (ano_atual - ano))
                 print(f"Frescor: {pontuacao_frescor} pontos")
 
     return pontuacao_frescor
