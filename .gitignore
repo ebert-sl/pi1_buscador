@@ -1,4 +1,4 @@
 cache/
 __pycache__/
-data.csv
-data.xlsx
+*.xlsx
+*.csv
