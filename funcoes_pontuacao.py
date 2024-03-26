@@ -61,7 +61,7 @@ def uso_em_tags(soup, termo):
     pontuacao_p = 0
     pontuacao_a = 0
 
-    if title != None:
+    if title:
         pontuacao_title += 20
 
     for meta in meta_tags:
