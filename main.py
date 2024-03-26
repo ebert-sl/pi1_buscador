@@ -124,9 +124,10 @@ def csv_para_excel():
     csv_files = glob.glob("data_*.csv")
     csv_files.sort(key=os.path.getmtime, reverse=True)
     if csv_files:
-        data = pd.read_csv(csv_files[0])
-        data_ordenada = data.sort_values("Total", ascending=False)
-        data_ordenada.to_excel("data_ordenada.xlsx", index=False)
+        for csv in csv_files:
+            data = pd.read_csv(csv, encoding="latin1")
+            data_ordenada = data.sort_values("Total", ascending=False)
+            data_ordenada.to_excel(csv.replace('.csv', '.xlsx'), index=False)
     else:
         print("Nenhum arquivo CSV encontrado.")
 
