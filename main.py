@@ -1,5 +1,4 @@
 import csv
-import glob
 import os
 import re
 import sys
@@ -19,7 +18,6 @@ from funcoes_pontuacao import (
 )
 
 links_visitados = set()
-
 
 def process_url(href, soup, termo, writer):
     print()
@@ -121,7 +119,6 @@ def main():
 
     menu_continuar()
 
-
 def csv_para_excel():
     data = pd.read_csv('data.csv', encoding='latin1')
     data_ordenada = data.sort_values('Total', ascending=False)
@@ -139,6 +136,5 @@ def menu_continuar():
     else:
         print("-----------------\nComando inválido!\n-----------------\n")
         menu_continuar()
-
 
 main()
