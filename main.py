@@ -48,17 +48,16 @@ def process_url(href, soup, termo, writer):
 
     print(f"Total: {total} pontos")
     print("-----------------------\n")
-    writer.writerow(
-        [
-            href,
-            autoridade_val,
-            frequencia_termos_val,
-            uso_em_tags_val,
-            auto_referencia_val,
-            frescor_val,
-            total,
-        ]
-    )
+    writer.writerow([
+        href, 
+        autoridade_val, 
+        frequencia_termos_val, 
+        uso_em_tags_val, 
+        auto_referencia_val, 
+        frescor_val, 
+        total,
+        listado
+    ])
 
 def main():
     links_visitados.clear()
@@ -85,18 +84,17 @@ def main():
 
         with open(filename, "w", newline="") as file:
             writer = csv.writer(file)
-            writer.writerow(
-                [
-                    "URL",
-                    "Autoridade",
-                    "Frequencia Termos",
-                    "Uso em Tags",
-                    "Auto Referencia",
-                    "Frescor",
+            if not os.path.exists('data.csv') or os.stat('data.csv').st_size == 0:
+                writer.writerow([
+                    "URL", 
+                    "Autoridade", 
+                    "Frequencia Termos", 
+                    "Uso em Tags", 
+                    "Auto Referencia", 
+                    "Frescor", 
                     "Total",
                     "Listado"
-                ]
-            )
+                ])
 
             if url not in links_visitados:
                 links_visitados.add(url)
