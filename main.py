@@ -18,7 +18,6 @@ from funcoes_pontuacao import (
     uso_em_tags,
 )
 
-links_visitados = set()
 
 def process_url(href, soup, termo, writer):
     print()
@@ -42,7 +41,7 @@ def process_url(href, soup, termo, writer):
 
     listado = ""
     if (frequencia_termos_val == 0):
-        listado = "Não"
+        listado = "Nao"
     else:
         listado = "Sim"
 
@@ -58,6 +57,9 @@ def process_url(href, soup, termo, writer):
         total,
         listado
     ])
+
+
+links_visitados = set()
 
 def main():
     links_visitados.clear()
@@ -120,6 +122,7 @@ def main():
 
     menu_continuar()
 
+
 def csv_para_excel():
     csv_files = glob.glob("data_*.csv")
     csv_files.sort(key=os.path.getmtime, reverse=True)
@@ -130,6 +133,7 @@ def csv_para_excel():
             data_ordenada.to_excel(csv.replace('.csv', '.xlsx'), index=False)
     else:
         print("Nenhum arquivo CSV encontrado.")
+
 
 def menu_continuar():
     continuar = input("Deseja continuar usando o programa?\n1 - Sim\n2 - Não\n")
@@ -143,5 +147,6 @@ def menu_continuar():
     else:
         print("-----------------\nComando inválido!\n-----------------\n")
         menu_continuar()
+
 
 main()
