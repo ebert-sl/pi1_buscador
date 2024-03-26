@@ -1,10 +1,12 @@
+import csv
+import glob
+import os
 import re
 import sys
-import csv
-import os
-import pandas as pd
+from datetime import datetime
 from urllib.parse import urljoin
 
+import pandas as pd
 import requests
 import requests_cache
 from bs4 import BeautifulSoup
@@ -18,7 +20,8 @@ from funcoes_pontuacao import (
 
 links_visitados = set()
 
-def process_url(href, soup, termo, writer):    
+
+def process_url(href, soup, termo, writer):
     print()
     print("-----------------------")
     print(f"\nPontuando a página: {href}")
@@ -58,9 +61,10 @@ def process_url(href, soup, termo, writer):
     ])
 
 def main():
+    links_visitados.clear()
     url = input("Digite a URL desejada: ")
     termo = input("Digite o termo que deseja buscar: ")
-    
+
     if re.match(r"^\s*$", termo):
         # ^ início da string | \s* zero ou mais espaços em branco | $ final da string
         print("O termo está vazio ou contém apenas espaços em branco.\n")
@@ -69,9 +73,17 @@ def main():
     try:
         requests_cache.install_cache("./cache/banco")
         response = requests.get(url, verify=True)
+        if response.status_code != 200:
+            raise Exception
+
         soup = BeautifulSoup(response.text, "html.parser")
 
-        with open('data.csv', 'a', newline='') as file:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Criar o nome do arquivo com o timestamp
+        filename = f"data_{timestamp}.csv"
+
+        with open(filename, "w", newline="") as file:
             writer = csv.writer(file)
             if not os.path.exists('data.csv') or os.stat('data.csv').st_size == 0:
                 writer.writerow([
@@ -109,6 +121,7 @@ def main():
 
     menu_continuar()
 
+
 def csv_para_excel():
     data = pd.read_csv('data.csv', encoding='latin1')
     data_ordenada = data.sort_values('Total', ascending=False)
@@ -126,5 +139,6 @@ def menu_continuar():
     else:
         print("-----------------\nComando inválido!\n-----------------\n")
         menu_continuar()
+
 
 main()
